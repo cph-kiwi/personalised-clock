@@ -166,20 +166,6 @@
 
       setInterval(setDate, 1000);
 
-      /*
-      function formatTime(time) {
-        return time.getHours() + ':' +
-          time.getMinutes() + ':' +
-          time.getSeconds();
-      }
-
-      const seoul = new Date(1489199400000);
-      const ny = new Date(1489199400000 - (840 * 60 * 1000));
-
-      formatTime(seoul);  // 11:30:00
-      formatTime(ny);     // 21:30:00
-      */
-
       const nzSecondHand = document.querySelector(".nzSecond-hand");
       const nzMinuteHand = document.querySelector(".nzMinute-hand");
       const nzHourHand = document.querySelector(".nzHour-hand");
@@ -196,9 +182,10 @@
         nzMinuteHand.style.transform = `rotate(${nzMinutesDegrees}deg)`;
 
         const nzHours = nzNow.getHours() + 10; // add 10 hours to get the NZ local time
-        if (nzHours >= 24) {
-          nzHours -= 24;
-        }
+        /* if (nzHours >= 24) {
+          nzHours = nzNow.getHours() - 14;
+        } */
+
         const nzHoursDegrees = (360 / 60) * nzHours + 90;
         nzHourHand.style.transform = `rotate(${nzHoursDegrees}deg)`;
 
