@@ -5,17 +5,43 @@
     <title>Beth's Clock</title>
   </head>
   <body>
-    <div class="clock">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand minute-hand"></div>
-        <div class="hand second-hand"></div>
+    <div class="local">
+      <label class="local-clock-label">Local Time</label>
+      <div class="local-clock">
+        <div class="local-clock-face">
+          <div class="local-hand hour-hand"></div>
+          <div class="local-hand minute-hand"></div>
+          <div class="local-hand second-hand"></div>
+        </div>
+        <div class="local-clock-time">
+          <p id="local-clock-time-string"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="NZ">
+      <label class="NZ-clock-label">New Zealand Time</label>
+      <div class="NZ-clock">
+        <div class="NZ-clock-face">
+          <div class="NZ-hand nzHour-hand"></div>
+          <div class="NZ-hand nzMinute-hand"></div>
+          <div class="NZ-hand nzSecond-hand"></div>
+        </div>
+        <div class="NZ-clock-time">
+          <p id="NZ-clock-time-string"></p>
+        </div>
       </div>
     </div>
 
     <style>
+      /*
+      * {
+        border: 1px solid red !important;
+      }
+      */
+
       html {
-        background: #018ded url(https://unsplash.it/1500/1000?image=881&blur=5);
+        background: lightgray;
         background-size: cover;
         font-family: "helvetica neue";
         text-align: center;
@@ -29,12 +55,13 @@
         flex: 1;
         min-height: 100vh;
         align-items: center;
+        justify-content: space-around;
       }
 
-      .clock {
+      .local-clock {
         width: 30rem;
         height: 30rem;
-        border: 20px solid white;
+        border: 20px solid black;
         border-radius: 50%;
         margin: 50px auto;
         position: relative;
@@ -43,7 +70,7 @@
           inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
       }
 
-      .clock-face {
+      .local-clock-face {
         position: relative;
         width: 100%;
         height: 100%;
@@ -52,7 +79,7 @@
         ); /* account for the height of the clock hands */
       }
 
-      .hand {
+      .local-hand {
         width: 50%;
         height: 6px;
         background: black;
@@ -63,17 +90,57 @@
         transition: all 0.05s;
         transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
       }
+
+      .local-clock-time {
+        padding: 30px;
+      }
+
+      .NZ-clock {
+        width: 30rem;
+        height: 30rem;
+        border: 20px solid black;
+        border-radius: 50%;
+        margin: 50px auto;
+        position: relative;
+        padding: 2rem;
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 0 3px #efefef,
+          inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .NZ-clock-face {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform: translateY(
+          -3px
+        ); /* account for the height of the clock hands */
+      }
+
+      .NZ-hand {
+        width: 50%;
+        height: 6px;
+        background: black;
+        position: absolute;
+        top: 50%;
+        transform-origin: 100%;
+        transform: rotate(90deg);
+        transition: all 0.05s;
+        transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+      }
+
+      .NZ-clock-time {
+        padding: 30px;
+      }
     </style>
 
     <script>
       const secondHand = document.querySelector(".second-hand");
       const minuteHand = document.querySelector(".minute-hand");
       const hourHand = document.querySelector(".hour-hand");
-      const allHands = document.querySelectorAll(".hand");
+      const allHands = document.querySelectorAll(".local-hand");
 
       function setDate() {
         const now = new Date();
-
         const seconds = now.getSeconds();
         const secondsDegrees = (360 / 60) * seconds + 90;
         secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
@@ -93,9 +160,62 @@
         }
 
         console.log("current Time: " + hours + ":" + minutes + ":" + seconds);
+        document.getElementById("local-clock-time-string").innerHTML =
+          hours + ":" + minutes + ":" + seconds;
       }
 
       setInterval(setDate, 1000);
+
+      /*
+      function formatTime(time) {
+        return time.getHours() + ':' +
+          time.getMinutes() + ':' +
+          time.getSeconds();
+      }
+
+      const seoul = new Date(1489199400000);
+      const ny = new Date(1489199400000 - (840 * 60 * 1000));
+
+      formatTime(seoul);  // 11:30:00
+      formatTime(ny);     // 21:30:00
+      */
+
+      const nzSecondHand = document.querySelector(".nzSecond-hand");
+      const nzMinuteHand = document.querySelector(".nzMinute-hand");
+      const nzHourHand = document.querySelector(".nzHour-hand");
+      const nzAllHands = document.querySelectorAll(".NZ-hand");
+
+      function nzSetDate() {
+        const nzNow = new Date();
+        const nzSeconds = nzNow.getSeconds();
+        const nzSecondsDegrees = (360 / 60) * nzSeconds + 90;
+        nzSecondHand.style.transform = `rotate(${nzSecondsDegrees}deg)`;
+
+        const nzMinutes = nzNow.getMinutes();
+        const nzMinutesDegrees = (360 / 60) * nzMinutes + 90;
+        nzMinuteHand.style.transform = `rotate(${nzMinutesDegrees}deg)`;
+
+        const nzHours = nzNow.getHours() + 10; // add 10 hours to get the NZ local time
+        if (nzHours >= 24) {
+          nzHours -= 24;
+        }
+        const nzHoursDegrees = (360 / 60) * nzHours + 90;
+        nzHourHand.style.transform = `rotate(${nzHoursDegrees}deg)`;
+
+        if (nzSecondsDegrees === 90) {
+          nzAllHands.forEach((hand) => (hand.style.transition = "none"));
+        } else {
+          nzAllHands.forEach((hand) => (hand.style.transition = ""));
+        }
+
+        console.log(
+          "NZ current Time: " + nzHours + ":" + nzMinutes + ":" + nzSeconds
+        );
+        document.getElementById("NZ-clock-time-string").innerHTML =
+          nzHours + ":" + nzMinutes + ":" + nzSeconds;
+      }
+
+      setInterval(nzSetDate, 1000);
     </script>
   </body>
 </html>
