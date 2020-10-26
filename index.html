@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>Beth's Clock</title>
+    <script src="https://unpkg.com/moment"></script>
+    <script src="./moment.js"></script>
   </head>
   <body>
     <div class="local">
@@ -91,6 +93,10 @@
         transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
       }
 
+      .hour-hand {
+        background: red;
+      }
+
       .local-clock-time {
         padding: 30px;
       }
@@ -128,9 +134,16 @@
         transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
       }
 
+      .nzHour-hand {
+        background: red;
+      }
+
       .NZ-clock-time {
         padding: 30px;
       }
+
+
+      
     </style>
 
     <script>
@@ -150,7 +163,7 @@
         minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
 
         const hours = now.getHours();
-        const hoursDegrees = (360 / 60) * hours + 90;
+        const hoursDegrees = (360 / 12) * hours + 90;
         hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
 
         if (secondsDegrees === 90) {
@@ -172,21 +185,17 @@
       const nzAllHands = document.querySelectorAll(".NZ-hand");
 
       function nzSetDate() {
-        const nzNow = new Date();
-        const nzSeconds = nzNow.getSeconds();
+        const nzNow = moment().tz("Pacific/Auckland");
+        const nzSeconds = nzNow.seconds();
         const nzSecondsDegrees = (360 / 60) * nzSeconds + 90;
         nzSecondHand.style.transform = `rotate(${nzSecondsDegrees}deg)`;
 
-        const nzMinutes = nzNow.getMinutes();
+        const nzMinutes = nzNow.minutes();
         const nzMinutesDegrees = (360 / 60) * nzMinutes + 90;
         nzMinuteHand.style.transform = `rotate(${nzMinutesDegrees}deg)`;
 
-        const nzHours = nzNow.getHours() + 10; // add 10 hours to get the NZ local time
-        /* if (nzHours >= 24) {
-          nzHours = nzNow.getHours() - 14;
-        } */
-
-        const nzHoursDegrees = (360 / 60) * nzHours + 90;
+        const nzHours = nzNow.hours();
+        const nzHoursDegrees = (360 / 12) * nzHours + 90;
         nzHourHand.style.transform = `rotate(${nzHoursDegrees}deg)`;
 
         if (nzSecondsDegrees === 90) {
